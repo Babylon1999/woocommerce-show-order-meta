@@ -1,8 +1,9 @@
 <?php
 /**
  * Plugin Name: WooCommerce Order Debugger
- * Description: Adds a custom metabox to WooCommerce orders to display meta data for HPOS websites.
- * Author: Your Name
+ * Description: Adds a metabox to the WooCommerce order edit page that displays metadata.
+ * Author: Saif Hassan
+ * Author URI: https://saif-hassan.com
  * Version: 0.0.1
  *
  * @package WooCommerce_Order_Debugger
