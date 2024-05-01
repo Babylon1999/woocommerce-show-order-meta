@@ -48,7 +48,11 @@ class WooCommerce_Order_Debugger {
 	}
 
 	public function should_run() {
-		return 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' );
+
+		if ( 'yes' === get_option( 'woocommerce_custom_orders_table_enabled' ) ) {
+			return true;
+		}
+		return false;
 	}
 
 	public function display_custom_metabox_content( $the_order ) {
