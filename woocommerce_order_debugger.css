@@ -1,0 +1,29 @@
+.woocommerce-show-order-meta-wrapper{
+	overflow-x:auto;
+}
+
+.woocommerce-show-order-meta-table {
+	width: 100%;
+	border: 1px solid #ddd;
+	border-collapse: collapse;
+}
+
+.woocommerce-show-order-meta-table th,
+.woocommerce-show-order-meta-table td {
+	border: 1px solid #ddd;
+	padding: 5px;
+	text-align: left;
+}
+
+.woocommerce-show-order-meta-table th {
+	background-color: #f7f7f7;
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 600px) {
+	.woocommerce-show-order-meta-table th,
+	.woocommerce-show-order-meta-table td {
+		padding: 2px;
+		font-size: 12px;
+	}
+}

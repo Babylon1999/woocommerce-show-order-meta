@@ -1,31 +1,65 @@
 <?php
 /**
- * Plugin Name: WooCommerce Order Debugger
+ * Plugin Name: WooCommerce Show Order Meta
  * Description: Adds a custom metabox to WooCommerce orders to display meta data for HPOS websites.
- * Author: Your Name
+ * Author: Saif Hassan
  * Version: 0.0.1
+ * Text Domain:       woocommerce-show-order-meta
+ * Domain Path:       /languages
+ * WC requires at least: 8.0.0
+ * WC tested up to: 8.8.3
  *
- * @package WooCommerce_Order_Debugger
+ * License: GNU General Public License v3.0
+ * @package WooCommerce_Show_Order_Meta
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'plugins_loaded', array( 'WooCommerce_Order_Debugger', 'init' ), 9 );
+define( 'WOOCOMMERCE_SHOW_ORDER_META', '0.0.1' );
 
-class WooCommerce_Order_Debugger {
+
+add_action( 'plugins_loaded', array( 'WooCommerce_Show_Order_Meta', 'init' ), 9 );
+
+class WooCommerce_Show_Order_Meta {
+
+	public $plugin_name;
 
 	public function __construct() {
 		if ( ! $this->should_run() ) {
 			return;
 		}
+		$this->plugin_name = 'woocommerce-show-order-meta';
+		add_action( 'before_woocommerce_init', array( $this, 'declare_hpos_compatibility' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_admin_order_meta_box' ) );
+		$this->load_plugin_textdomain();
 	}
 
 	public static function init() {
 		$class = __CLASS__;
 		new $class();
+	}
+
+	public function get_plugin_name() {
+		return $this->plugin_name;
+	}
+    
+
+	public function load_plugin_textdomain() {
+
+		load_plugin_textdomain(
+			'woocommerce-show-order-meta',
+			false,
+			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+		);
+	}
+
+
+	public function declare_hpos_compatibility() {
+		if ( class_exists( AutomatticWooCommerceUtilitiesFeaturesUtil::class ) ) {
+			AutomatticWooCommerceUtilitiesFeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		}
 	}
 
 	public function add_admin_order_meta_box() {
@@ -57,31 +91,35 @@ class WooCommerce_Order_Debugger {
 
 	public function display_custom_metabox_content( $the_order ) {
 		$order = wc_get_order( $the_order->ID );
-
+	
 		if ( ! $order instanceof WC_Order ) {
 			return;
 		}
-
+	
 		$order_meta_data = $order->get_meta_data();
-
-		$html  = '<table style="width:100%;border:1px solid #ddd;border-collapse:collapse;">';
-		$html .= '<tr style="background-color:#f7f7f7;">';
-		$html .= '<th style="border:1px solid #ddd;padding:5px;text-align:left;">ID</th>';
-		$html .= '<th style="border:1px solid #ddd;padding:5px;text-align:left;">Key</th>';
-		$html .= '<th style="border:1px solid #ddd;padding:5px;text-align:left;">Value</th>';
+	    $html = '<div class="woocommerce-show-order-meta-wrapper" >';
+		$html .= '<table class="woocommerce-show-order-meta-table">';
+		$html .= '<tr>';
+		$html .= '<th>' . esc_html__( 'ID', 'woocommerce-show-order-meta' ) . '</th>';
+		$html .= '<th>' . esc_html__( 'Key', 'woocommerce-show-order-meta' ) . '</th>';
+		$html .= '<th>' . esc_html__( 'Value', 'woocommerce-show-order-meta' ) . '</th>';
 		$html .= '</tr>';
-
+	
 		foreach ( $order_meta_data as $meta ) {
 			$meta_data = $meta->get_data();
 			$html     .= '<tr>';
-			$html     .= '<td style="border:1px solid #ddd;padding:5px;">' . esc_html( $meta_data['id'] ) . '</td>';
-			$html     .= '<td style="border:1px solid #ddd;padding:5px;">' . esc_html( $meta_data['key'] ) . '</td>';
-			$html     .= '<td style="border:1px solid #ddd;padding:5px;">' . esc_html( $meta_data['value'] ) . '</td>';
+			$html     .= '<td>' . esc_html( $meta_data['id'] ) . '</td>';
+			$html     .= '<td>' . esc_html( $meta_data['key'] ) . '</td>';
+			$html     .= '<td>' . esc_html( $meta_data['value'] ) . '</td>';
 			$html     .= '</tr>';
 		}
-
+	
 		$html .= '</table>';
-
+		$html .= '</div>';
+	
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'woocommerce_order_debugger.css', array(), WOOCOMMERCE_SHOW_ORDER_META, 'all' );
+	
 		echo wp_kses_post( $html );
 	}
+
 }
