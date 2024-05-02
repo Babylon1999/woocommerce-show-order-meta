@@ -4,8 +4,8 @@
  * Description: Adds a custom metabox to WooCommerce orders to display meta data for HPOS websites.
  * Author: Saif Hassan
  * Version: 0.0.1
- * Text Domain:       woocommerce-show-order-meta
- * Domain Path:       /languages
+ * Text Domain: woocommerce-show-order-meta
+ * Domain Path: /languages
  * WC requires at least: 8.0.0
  * WC tested up to: 8.8.3
  *
