@@ -58,8 +58,8 @@ class WooCommerce_Show_Order_Meta {
 
 
 	public function declare_hpos_compatibility() {
-		if ( class_exists( AutomatticWooCommerceUtilitiesFeaturesUtil::class ) ) {
-			AutomatticWooCommerceUtilitiesFeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 		}
 	}
 
