@@ -10,6 +10,7 @@
  * WC tested up to: 8.8.3
  *
  * License: GNU General Public License v3.0
+ *
  * @package WooCommerce_Show_Order_Meta
  */
 
@@ -17,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WOOCOMMERCE_SHOW_ORDER_META', '0.0.1' );
+define( 'WOOCOMMERCE_SHOW_ORDER_META', '0.0.2' );
 
 
 add_action( 'plugins_loaded', array( 'WooCommerce_Show_Order_Meta', 'init' ), 9 );
@@ -44,7 +45,7 @@ class WooCommerce_Show_Order_Meta {
 	public function get_plugin_name() {
 		return $this->plugin_name;
 	}
-    
+
 
 	public function load_plugin_textdomain() {
 
@@ -91,20 +92,20 @@ class WooCommerce_Show_Order_Meta {
 
 	public function display_custom_metabox_content( $the_order ) {
 		$order = wc_get_order( $the_order->ID );
-	
+
 		if ( ! $order instanceof WC_Order ) {
 			return;
 		}
-	
+
 		$order_meta_data = $order->get_meta_data();
-	    $html = '<div class="woocommerce-show-order-meta-wrapper" >';
-		$html .= '<table class="woocommerce-show-order-meta-table">';
-		$html .= '<tr>';
-		$html .= '<th>' . esc_html__( 'ID', 'woocommerce-show-order-meta' ) . '</th>';
-		$html .= '<th>' . esc_html__( 'Key', 'woocommerce-show-order-meta' ) . '</th>';
-		$html .= '<th>' . esc_html__( 'Value', 'woocommerce-show-order-meta' ) . '</th>';
-		$html .= '</tr>';
-	
+		$html            = '<div class="woocommerce-show-order-meta-wrapper" >';
+		$html           .= '<table class="woocommerce-show-order-meta-table">';
+		$html           .= '<tr>';
+		$html           .= '<th>' . esc_html__( 'ID', 'woocommerce-show-order-meta' ) . '</th>';
+		$html           .= '<th>' . esc_html__( 'Key', 'woocommerce-show-order-meta' ) . '</th>';
+		$html           .= '<th>' . esc_html__( 'Value', 'woocommerce-show-order-meta' ) . '</th>';
+		$html           .= '</tr>';
+
 		foreach ( $order_meta_data as $meta ) {
 			$meta_data = $meta->get_data();
 			$html     .= '<tr>';
@@ -113,13 +114,12 @@ class WooCommerce_Show_Order_Meta {
 			$html     .= '<td>' . esc_html( $meta_data['value'] ) . '</td>';
 			$html     .= '</tr>';
 		}
-	
+
 		$html .= '</table>';
 		$html .= '</div>';
-	
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'woocommerce_order_debugger.css', array(), WOOCOMMERCE_SHOW_ORDER_META, 'all' );
-	
+
 		echo wp_kses_post( $html );
 	}
-
 }
