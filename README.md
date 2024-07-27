@@ -1,4 +1,5 @@
-# woocommerce-order-debugger
+# woocommerce-show-order-meta
+
 A simple plugin that will display the order meta on the order edit page, when HPOS is enabled.
 
 
